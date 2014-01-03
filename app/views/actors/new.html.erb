@@ -1,0 +1,37 @@
+<%= form_for(@actor.with_blank_comment) do |f| %>
+    <% if @actor.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@actor.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+          <ul>
+            <% @actor.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :first_name %><br />
+      <%= f.text_field :first_name %>
+    </div>
+    <div class="field">
+      <%= f.label :last_name %><br />
+      <%= f.text_field :last_name %>
+    </div>
+
+    <%= f.fields_for(:comments) do |comments_form| %>
+        <div class="field">
+          <%=  comments_form.label 'Comment:' %>
+          <%=  comments_form.text_field :content %>
+          <%=  unless comments_form.object.new_record?
+                 comments_form.check_box('_destroy') + comments_form.label('_destroy','Remove')
+               end %>
+        </div>
+    <% end %>
+
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

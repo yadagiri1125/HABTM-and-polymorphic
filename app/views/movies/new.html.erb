@@ -1,0 +1,46 @@
+<%= form_for(@movie.with_blank_comment) do |f| %>
+    <% if @movie.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@movie.errors.count, "error") %> prohibited this page from being saved:</h2>
+
+          <ul>
+            <% @movie.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :title %><br />
+      <%= f.text_field :title %>
+    </div>
+    <div class="field">
+      <%= f.label :duration %><br />
+      <%= f.text_field :duration %>
+    </div>
+
+    <% Actor.all.each do |actor| %>
+        <div class="checkboxform">
+          <%= check_box_tag "movie[actor_ids][]", actor.id,@movie.actors.include?(actor) %>
+          <label><%= actor.first_name %></label>
+        </div>
+    <% end %>
+
+
+
+    <%= f.fields_for(:comments) do |comments_form| %>
+        <div class="field">
+          <%=  comments_form.label 'Comment:' %>
+          <%=  comments_form.text_field :content %>
+          <%=  unless comments_form.object.new_record?
+                 comments_form.check_box('_destroy') + comments_form.label('_destroy','Remove')
+               end %>
+        </div>
+    <% end %>
+
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
